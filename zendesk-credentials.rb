@@ -10,7 +10,7 @@ end
 
 client = ZendeskAPI::Client.new do |config|
     # Mandatory:
-    config.url = "https://opennebula.zendesk.com/api/v2"
+    config.url = "https://opennebua.zendesk.com/api/v2"
 
     # Basic / Token Authentication
     config.username = ARGV[0]
@@ -40,8 +40,17 @@ client = ZendeskAPI::Client.new do |config|
     # use the API at https://yoursubdomain.zendesk.com/api/v2
 end
 
-if client.current_user.nil? || client.current_user.id.nil?
+puts "Zendesk response"
+puts
+puts "username: #{client.config.username}"
+puts "password: #{client.config.password}"
+puts
+
+if client.current_user.nil?
+    puts "Connection error"
+elsif client.current_user.id.nil?
     puts "Zendesk account credentials are incorrect"
+    puts client.current_user
 else
     puts "Zendesk account credentials are correct"
 end
