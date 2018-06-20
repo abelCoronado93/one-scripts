@@ -10,7 +10,7 @@ end
 
 client = ZendeskAPI::Client.new do |config|
     # Mandatory:
-    config.url = "https://opennebua.zendesk.com/api/v2"
+    config.url = "https://opennebula.zendesk.com/api/v2"
 
     # Basic / Token Authentication
     config.username = ARGV[0]
