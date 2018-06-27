@@ -44,14 +44,30 @@ require 'pp'
 require 'pry'
 
 require 'opennebula'
-require 'vcenter_driver'
 include OpenNebula
 
+def parse_times(pagination = nil)
+    t1 = Time.now
+    if !pagination
+        rc = @vmpool.get_hash
+    else
+        rc = @vmpool.get_hash pagination
+    end
+
+    t2 = Time.now
+    pp "get_hash [DEFAULT_POOL_PAGE_SIZE = #{pagination}]: #{t2-t1} || records: #{rc["VM_POOL"]["VM"].size}"
+
+    t1 = Time.now
+    JSON.pretty_generate rc
+    t2 = Time.now
+    pp "get_json: #{t2-t1}"
+end
+
 @client = Client.new
-vmpool = VirtualMachinePool.new(@client, -2)
+@vmpool = VirtualMachinePool.new(@client, -2)
 
 t1 = Time.now
-vmpool.info_all
+@vmpool.info_all
 t2 = Time.now
 pp "get_xml: #{t2-t1}"
 
@@ -59,87 +75,38 @@ pp "get_xml: #{t2-t1}"
 #             no pagination             #
 #########################################
 
-t1 = Time.now
-rc = vmpool.get_hash
-t2 = Time.now
-pp "get_hash [DEFAULT_POOL_PAGE_SIZE = 0]: #{t2-t1} || records: #{rc["VM_POOL"]["VM"].size}"
-
-t1 = Time.now
-JSON.pretty_generate rc
-t2 = Time.now
-pp "get_json: #{t2-t1}"
+parse_times
 
 
 #########################################
 #                  50                   #
 #########################################
 
-t1 = Time.now
-rc = vmpool.get_hash 50
-t2 = Time.now
-pp "get_hash [DEFAULT_POOL_PAGE_SIZE = 50]: #{t2-t1} || records: #{rc["VM_POOL"]["VM"].size}"
-
-t1 = Time.now
-JSON.pretty_generate rc
-t2 = Time.now
-pp "get_json: #{t2-t1}"
-
+parse_times 50
 
 #########################################
 #                  100                  #
 #########################################
 
-t1 = Time.now
-rc = vmpool.get_hash 100
-t2 = Time.now
-pp "get_hash [DEFAULT_POOL_PAGE_SIZE = 100]: #{t2-t1} || records: #{rc["VM_POOL"]["VM"].size}"
-
-t1 = Time.now
-JSON.pretty_generate rc
-t2 = Time.now
-pp "get_json: #{t2-t1}"
+parse_times 100
 
 
 #########################################
 #                  200                  #
 #########################################
 
-t1 = Time.now
-rc = vmpool.get_hash 200
-t2 = Time.now
-pp "get_hash [DEFAULT_POOL_PAGE_SIZE = 200]: #{t2-t1} || records: #{rc["VM_POOL"]["VM"].size}"
-
-t1 = Time.now
-JSON.pretty_generate rc
-t2 = Time.now
-pp "get_json: #{t2-t1}"
+parse_times 200
 
 
 #########################################
 #                  300                  #
 #########################################
 
-t1 = Time.now
-rc = vmpool.get_hash 300
-t2 = Time.now
-pp "get_hash [DEFAULT_POOL_PAGE_SIZE = 300]: #{t2-t1} || records: #{rc["VM_POOL"]["VM"].size}"
-
-t1 = Time.now
-JSON.pretty_generate rc
-t2 = Time.now
-pp "get_json: #{t2-t1}"
+parse_times 300
 
 
 #########################################
 #                  500                  #
 #########################################
 
-t1 = Time.now
-rc = vmpool.get_hash 500
-t2 = Time.now
-pp "get_hash [DEFAULT_POOL_PAGE_SIZE = 500]: #{t2-t1} || records: #{rc["VM_POOL"]["VM"].size}"
-
-t1 = Time.now
-JSON.pretty_generate rc
-t2 = Time.now
-pp "get_json: #{t2-t1}"
+parse_times 500
